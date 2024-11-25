@@ -436,7 +436,7 @@ class _CropEditorState extends State<_CropEditor> {
     }
 
     if (widget.interactive) {
-      final initialScale = calculator.scaleToCover(screenSize, _imageRect) * max(1, (widget.initialZoom ?? 1));
+      final initialScale = calculator.scaleToCover(screenSize, _imageRect) * max(0, (widget.initialZoom ?? 1));
       _applyScale(initialScale);
     }
   }
