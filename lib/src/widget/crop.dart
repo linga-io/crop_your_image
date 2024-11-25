@@ -134,6 +134,11 @@ class Crop extends StatelessWidget {
   /// (Advanced) Injected logic for parsing image detail.
   final ImageParser imageParser;
 
+  /// If set, the image will start scaled from the center by this amount.
+  /// Set double value >= 1.0
+  /// 1.0 by default.
+  final double initialZoom;
+
   Crop({
     super.key,
     required this.image,
@@ -154,6 +159,7 @@ class Crop extends StatelessWidget {
     this.fixCropRect = false,
     this.progressIndicator = const SizedBox.shrink(),
     this.interactive = false,
+    this.initialZoom = 1.0,
     this.willUpdateScale,
     this.formatDetector = defaultFormatDetector,
     this.imageCropper = defaultImageCropper,
@@ -192,6 +198,7 @@ class Crop extends StatelessWidget {
             fixCropRect: fixCropRect,
             progressIndicator: progressIndicator,
             interactive: interactive,
+            initialZoom: initialZoom,
             willUpdateScale: willUpdateScale,
             scrollZoomSensitivity: scrollZoomSensitivity,
             imageCropper: imageCropper,
@@ -228,6 +235,7 @@ class _CropEditor extends StatefulWidget {
   final FormatDetector? formatDetector;
   final ImageParser imageParser;
   final double scrollZoomSensitivity;
+  final double? initialZoom;
 
   const _CropEditor({
     super.key,
@@ -254,6 +262,7 @@ class _CropEditor extends StatefulWidget {
     required this.formatDetector,
     required this.imageParser,
     required this.scrollZoomSensitivity,
+    this.initialZoom,
   });
 
   @override
@@ -427,7 +436,7 @@ class _CropEditorState extends State<_CropEditor> {
     }
 
     if (widget.interactive) {
-      final initialScale = calculator.scaleToCover(screenSize, _imageRect);
+      final initialScale = calculator.scaleToCover(screenSize, _imageRect) * max(1, (widget.initialZoom ?? 1));
       _applyScale(initialScale);
     }
   }
